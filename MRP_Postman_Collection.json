@@ -1,0 +1,155 @@
+{
+  "info": {
+    "name": "MRP Intermediate API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/users/register",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "users", "register"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"1234\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/users/login",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "users", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"1234\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "Create Media",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/media/create",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "media", "create"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Inception\",\n  \"description\": \"Sci-fi thriller\",\n  \"mediaType\": \"movie\",\n  \"releaseYear\": 2010,\n  \"ageRestriction\": 12\n}"
+            }
+          }
+        },
+        {
+          "name": "List Media",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/media/list",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "media", "list"]
+            }
+          }
+        },
+        {
+          "name": "Get Media by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:8080/api/media/get?id=1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "media", "get"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Media",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/media/update",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "media", "update"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 1,\n  \"title\": \"Updated Title\",\n  \"description\": \"Updated Desc\",\n  \"mediaType\": \"movie\",\n  \"releaseYear\": 2012,\n  \"ageRestriction\": 16\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Media",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:8080/api/media/delete?id=1",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["api", "media", "delete"],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
