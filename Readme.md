@@ -90,3 +90,12 @@ Authorization: Bearer <username>-mrpToken
 - Filter & Sortierung
 
 Diese Features sind für die Final Submission vorgesehen.
+
+## GitHub Repository
+https://github.com/monael6/mrp-intermediate
+
+Dann:
+
+git add Readme.md
+git commit -m "Update GitHub repository link"
+git push
