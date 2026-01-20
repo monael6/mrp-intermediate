@@ -1,32 +1,43 @@
 package org.example;
 
 import org.example.db.Database;
-import org.example.handlers.*;
-
+import org.example.handlers.auth.*;
+import org.example.handlers.user.*;
+import org.example.handlers.media.*;
+import org.example.handlers.rating.*;
+import org.example.handlers.leaderboard.*;
+import org.example.handlers.reco.*;
+import org.example.handlers.favorite.*;
 import com.sun.net.httpserver.HttpServer;
-
 import java.net.InetSocketAddress;
 
 public class Main {
     public static void main(String[] args) throws Exception {
 
-        //erstellt die tabellen
         Database.init();
 
-        //server starten auf port 8080
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
-        // USERS ( router dupe um handler zu regestrieren für api request)
+        // AUTH
         server.createContext("/api/users/register", new RegisterHandler());
         server.createContext("/api/users/login", new LoginHandler());
 
-        // MEDIA
-        server.createContext("/api/media/create", new MediaCreateHandler());
-        server.createContext("/api/media/update", new MediaUpdateHandler());
-        server.createContext("/api/media/delete", new MediaDeleteHandler());
-        server.createContext("/api/media/get", new MediaGetHandler());
-        server.createContext("/api/media/list", new MediaListHandler());
+        // USERS (/api/users/{id}/...)
+        server.createContext("/api/users/", new UserIdRouterHandler());
 
+        // MEDIA (/api/media + /api/media/{id} + /api/media/{id}/favorite)
+        server.createContext("/api/media", new MediaRouterHandler());
+        server.createContext("/api/media/", new MediaIdRouterHandler());
+
+        // RATINGS (/api/ratings/{id} + /api/ratings/{id}/confirm +
+        // /api/ratings/{id}/like)
+        // RATINGS (/api/ratings?mediaId=...)
+        server.createContext("/api/ratings", new RatingListHandler());
+        // /api/ratings/{id}
+        server.createContext("/api/ratings/", new RatingsIdRouterHandler());
+
+        // LEADERBOARD
+        server.createContext("/api/leaderboard", new LeaderboardHandler());
 
         server.start();
         System.out.println("Server running...");

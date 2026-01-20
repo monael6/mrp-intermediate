@@ -1,5 +1,6 @@
-package org.example.handlers;
-
+package org.example.handlers.media;
+import com.fasterxml.jackson.databind.ObjectMapper;import org.example.handlers.auth.AuthUtil;
+import org.example.handlers.util.PathUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.*;
 import org.example.domain.Media;
@@ -13,6 +14,17 @@ public class MediaCreateHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        try {
+            handleInternal(exchange);
+        } catch (Exception e) {
+            e.printStackTrace();
+            exchange.sendResponseHeaders(500, -1);
+        } finally {
+            exchange.close();
+        }
+    }
+
+    private void handleInternal(HttpExchange exchange) throws Exception {
 
         if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
             exchange.sendResponseHeaders(405, -1);
@@ -26,12 +38,14 @@ public class MediaCreateHandler implements HttpHandler {
             return;
         }
 
-        User user = UserRepository.getUserByToken(auth.substring(7));
+        String token = auth.substring("Bearer ".length()).trim();
+        User user = UserRepository.getUserByToken(token);
         if (user == null) {
             exchange.sendResponseHeaders(401, -1);
             return;
         }
 
+        // BODY PARSEN
         ObjectMapper mapper = new ObjectMapper();
         Media m;
 
@@ -46,15 +60,12 @@ public class MediaCreateHandler implements HttpHandler {
         // CREATOR SETZEN
         m.creatorId = user.id;
 
-        try {
-            MediaRepository.save(m);
-            String res = "{\"message\":\"media created\"}";
-            exchange.sendResponseHeaders(201, res.length());
-            exchange.getResponseBody().write(res.getBytes());
-        } catch (Exception e) {
-            exchange.sendResponseHeaders(500, -1);
-        }
+        // OPTIONAL: genres darf null sein, repo handled das
+        int mediaId = MediaRepository.save(m);
 
-        exchange.close();
+        String res = "{\"message\":\"media created\",\"id\":" + mediaId + "}";
+        exchange.getResponseHeaders().add("Content-Type", "application/json");
+        exchange.sendResponseHeaders(201, res.getBytes().length);
+        exchange.getResponseBody().write(res.getBytes());
     }
 }
